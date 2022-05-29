@@ -6,6 +6,7 @@ import com.cupheadgame.cupheadgame.Models.Database;
 import com.cupheadgame.cupheadgame.Models.User;
 import javafx.application.Application;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -47,14 +48,31 @@ public class GamePanel extends Application {
     }
 
     public void continueGame(MouseEvent mouseEvent) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText(null);
+        alert.setContentText("this option not implement yet!");
+        alert.show();
     }
 
-    public void profileView(MouseEvent mouseEvent) {
+    public void profileView(MouseEvent mouseEvent) throws Exception {
+        if (Database.getInstance().getLoggedInUser().getUsername().equals("guest")) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setContentText("guest can not access to this option");
+            alert.showAndWait();
+            return;
+        }
+        new ProfilePage().start(Main.getStage());
     }
 
-    public void viewScoreBoard(MouseEvent mouseEvent) {
+    public void viewScoreBoard(MouseEvent mouseEvent) throws Exception {
+        new ScoreBoardPage().start(Main.getStage());
     }
 
     public void Setting(MouseEvent mouseEvent) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setContentText("not implemented yet");
+        alert.setHeaderText(null);
+        alert.showAndWait();
     }
 }

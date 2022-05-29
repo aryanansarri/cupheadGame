@@ -56,7 +56,6 @@ public class RegisterController {
         alert.setContentText("register successfully");
         alert.showAndWait();
         clear();
-//        to do save data to json file
         Database.getInstance().saveData();
     }
 
