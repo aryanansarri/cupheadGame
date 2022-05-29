@@ -16,7 +16,7 @@ public class Cloud extends Transition {
     @Override
     protected void interpolate(double v) {
         imageView.setX(imageView.getX() - 0.5);
-        if (imageView.getX() <= -630) {
+        if (imageView.getX() <= -610) {
             this.stop();
             imageView.setX(0);
             this.play();

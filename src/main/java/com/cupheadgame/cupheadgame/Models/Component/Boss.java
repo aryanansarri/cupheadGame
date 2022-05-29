@@ -22,4 +22,7 @@ public class Boss extends Rectangle {
         this.image = image;
         this.setFill(new ImagePattern(image));
     }
+    public boolean hasCollision(Rectangle rectangle) {
+        return rectangle.getBoundsInParent().intersects(rectangle.getLayoutBounds());
+    }
 }

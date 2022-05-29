@@ -1,5 +1,6 @@
 package com.cupheadgame.cupheadgame.Models;
 
+import com.cupheadgame.cupheadgame.Main;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -17,9 +18,11 @@ public class Database {
     public Database() {
         loggedInUser = null;
         loadData();
+        loadGameData();
     }
 
     private ArrayList<User> users;
+    private ArrayList<Game> games;
     private User loggedInUser;
 
     public void loadData() {
@@ -31,6 +34,29 @@ public class Database {
         catch (Exception ex) {
             users = new ArrayList<>();
             saveData();
+        }
+    }
+
+    public void loadGameData() {
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("games.json"));
+            games = new Gson().fromJson(br, new TypeToken<ArrayList<Game>>(){}.getType());
+            br.close();
+        }
+        catch (Exception ex) {
+            games = new ArrayList<>();
+            saveGameData();
+        }
+    }
+
+    private void saveGameData() {
+        try {
+            FileWriter writer = new FileWriter("games.json");
+            writer.write(new Gson().toJson(games));
+            writer.close();
+        }
+        catch (Exception ex) {
+            System.err.println(ex);
         }
     }
 
@@ -80,5 +106,11 @@ public class Database {
 
     public void Login(User user) {
         setLoggedInUser(user);
+    }
+
+    public void setScore(int score) {
+        this.loggedInUser.score = Math.max(
+                this.loggedInUser.score, score
+        );
     }
 }

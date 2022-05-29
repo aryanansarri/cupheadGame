@@ -1,20 +1,18 @@
 package com.cupheadgame.cupheadgame.Controller;
 
 import com.cupheadgame.cupheadgame.Main;
-import com.cupheadgame.cupheadgame.Models.Component.Airplane;
-import com.cupheadgame.cupheadgame.Models.Component.Bomb;
-import com.cupheadgame.cupheadgame.Models.Component.Boss;
-import com.cupheadgame.cupheadgame.Models.Component.Bullet;
-import com.cupheadgame.cupheadgame.Models.Transitions.BombTransition;
-import com.cupheadgame.cupheadgame.Models.Transitions.BossTransition;
-import com.cupheadgame.cupheadgame.Models.Transitions.BulletTransition;
-import com.cupheadgame.cupheadgame.Models.Transitions.Cloud;
+import com.cupheadgame.cupheadgame.Models.Component.*;
+import com.cupheadgame.cupheadgame.Models.Database;
+import com.cupheadgame.cupheadgame.Models.Game;
+import com.cupheadgame.cupheadgame.Models.Timer;
+import com.cupheadgame.cupheadgame.Models.Transitions.*;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
@@ -24,21 +22,32 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.AudioClip;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class GameController extends Application {
-    private int score = 0;
-    Label label = new Label("");
+    private Label label = new Label("");
+    private Label rocket = new Label("");
+
+    private Label timer = new Label("");
     private Image currentBomb = new Image(Main.class.getResource(
             "Pic/Game/models/BulletLogos/BulletLogo.png").toExternalForm());
 
     private Image muteImg = new Image(Main.class.getResource(
             "Pic/mute.png").toExternalForm());
-    Rectangle currentBombShape = new Rectangle(5, 700, 66, 66);
+
+    private Image tRocket = new Image(Main.class.getResource(
+            "Pic/Game/models/rocket/t.png").toExternalForm());
+
+    private Image rRocket = new Image(Main.class.getResource(
+            "Pic/Game/models/rocket/r.png").toExternalForm());
+    private Rectangle currentBombShape = new Rectangle(5, 700, 66, 66);
+    private Rectangle rocketIcon = new Rectangle(139, 690, 127, 76);
     private boolean bomb = true;
+    private boolean firstAlet = false;
 
     private boolean mute = false;
     private AudioClip bultAudioSound = new AudioClip(
@@ -51,6 +60,12 @@ public class GameController extends Application {
 
     private AudioClip audioClip = new
             AudioClip(Main.class.getResource("Musics/1.mp3").toExternalForm());
+
+    private AudioClip rocketSound = new
+            AudioClip(Main.class.getResource("Musics/rocket.mp3").toExternalForm());
+
+    private AudioClip emptySound = new
+            AudioClip(Main.class.getResource("Musics/empty.mp3").toExternalForm());
     @Override
     public void start(Stage stage) throws Exception {
         Pane pane = FXMLLoader.load(Main.class.getResource("GameMenu.fxml"));
@@ -58,8 +73,11 @@ public class GameController extends Application {
         createAirplane(pane);
         setBulletLogos();
         setScoreLabel(pane);
+        setRocketLabel(pane);
+        setTimerLabel(pane);
         setBoss(pane);
         setMute(pane);
+        setRocketIcon(pane);
         pane.getChildren().add(currentBombShape);
         Scene scene = new Scene(pane);
         stage.setTitle("cupheadGame");
@@ -67,13 +85,14 @@ public class GameController extends Application {
         stage.setResizable(false);
         pane.getChildren().get(2).requestFocus();
         stage.centerOnScreen();
-        stage.setFullScreen(true);
+        //stage.setFullScreen(true);
         stage.show();
     }
     public void initialize() {
         audioClip.setCycleCount(-1);
         if (!mute)
             audioClip.play();
+        Game.newGame(Database.getInstance().getLoggedInUser());
     }
 
     private void createBackground(Pane pane) {
@@ -110,9 +129,9 @@ public class GameController extends Application {
                 }
                 else if (keyEvent.getCode().equals(KeyCode.SPACE)) {
                     if (bomb) {
-                        Bullet bullet = new Bullet();
+                        Bullet bullet = new Bullet(pane);
                         pane.getChildren().add(bullet);
-                        BulletTransition bulletTransition = new BulletTransition(bullet);
+                        BulletTransition bulletTransition = new BulletTransition(bullet, pane);
                         bulletTransition.play();
                         if (!mute)
                             bultAudioSound.play();
@@ -126,7 +145,7 @@ public class GameController extends Application {
                     else {
                         Bomb bmb = new Bomb();
                         pane.getChildren().add(bmb);
-                        BombTransition bombTransition = new BombTransition(bmb);
+                        BombTransition bombTransition = new BombTransition(bmb, pane);
                         bombTransition.play();
                         if (!mute)
                             bombAudioSound.play();
@@ -151,7 +170,28 @@ public class GameController extends Application {
                     }
                     currentBombShape.setFill(new ImagePattern(currentBomb));
                 }
-                updateScore();
+                else if (keyEvent.getCode().equals(KeyCode.CONTROL)) {
+                    if (Game.getGame().getRocket() >= 100) {
+                        if (!mute)
+                            rocketSound.play();
+                        Game.getGame().setRocket(0);
+                        Rocket r = new Rocket(pane);
+                        pane.getChildren().add(r);
+                        RocketTransition rocketTransition = new RocketTransition(r, pane);
+                        rocketTransition.play();
+                        rocketTransition.setOnFinished(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent actionEvent) {
+                                pane.getChildren().remove(r);
+                            }
+                        });
+                    }
+                    else {
+                        if (!mute)
+                            emptySound.play();
+                    }
+                }
+
             }
         });
         pane.getChildren().add(airplane);
@@ -162,21 +202,61 @@ public class GameController extends Application {
     }
 
     private void setScoreLabel(Pane pane) {
-        label.setText("score: " + score);
+        label.setText("score: " + Game.getGame().getScore());
         label.setTranslateX(1250);
         label.setTranslateY(730);
         label.setFont(new Font(18));
         pane.getChildren().add(label);
     }
 
-    private void updateScore() {
-        label.setText("score: " + score);
+    private void setRocketLabel(Pane pane) {
+        rocket.setText("rocket: " + Game.getGame().getRocket() + "%");
+        rocket.setTranslateX(1250);
+        rocket.setTranslateY(700);
+        rocket.setFont(new Font(18));
+        pane.getChildren().add(rocket);
+    }
+
+    private void setTimerLabel(Pane pane) {
+        timer.setText(Timer.getTimer().getM()+" : " + Timer.getTimer().getS());
+        timer.setTranslateX(50);
+        timer.setTranslateY(5);
+        timer.setFont(new Font(18));
+        pane.getChildren().add(timer);
+    }
+
+    public void timerUpdate() {
+        timer.setText(Timer.getTimer().getM()+" : " + Timer.getTimer().getS());
+    }
+    public void updateRocket() {
+        String percent = String.valueOf(
+                Math.round(Game.getGame().getRocket()));
+
+        rocket.setText("rocket: " + percent + "%");
+        if (Game.getGame().getRocket() >= 100) {
+            rocket.setTextFill(Color.BLUE);
+            rocketIcon.setFill(new ImagePattern(tRocket));
+            if (!firstAlet) {
+                firstAlet = true;
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setHeaderText(null);
+                alert.setContentText("You can shoot rocket with press Ctrl!");
+                alert.show();
+            }
+        }
+        else {
+            rocket.setTextFill(Color.BLACK);
+            rocketIcon.setFill(new ImagePattern(rRocket));
+        }
+    }
+    public void updateScore() {
+        label.setText("score: " + Game.getGame().getScore());
     }
 
     private void setBoss(Pane pane) {
         Boss boss = Boss.getInstance();
         pane.getChildren().add(boss);
-        BossTransition bossTransition = new BossTransition(boss);
+        BossTransition bossTransition = new BossTransition(boss, this);
         bossTransition.play();
     }
 
@@ -199,5 +279,10 @@ public class GameController extends Application {
             }
         });
         pane.getChildren().add(rectangle);
+    }
+
+    private void setRocketIcon(Pane pane) {
+        rocketIcon.setFill(new ImagePattern(tRocket));
+        pane.getChildren().add(rocketIcon);
     }
 }

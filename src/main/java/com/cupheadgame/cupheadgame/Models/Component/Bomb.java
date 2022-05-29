@@ -22,4 +22,7 @@ public class Bomb extends Rectangle {
     public boolean hitFloor() {
         return this.getY() + this.getHeight() >= 800;
     }
+    public boolean hasCollision(Rectangle rectangle) {
+        return rectangle.getBoundsInParent().intersects(rectangle.getLayoutBounds());
+    }
 }
