@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cupheadgame.cupheadgame.ProfilePage">
+   <children>
+      <Label layoutX="361.0" layoutY="52.0" text="Score Boards" />
+      <ImageView fx:id="avatar" fitHeight="127.0" fitWidth="193.0" layoutX="33.0" layoutY="81.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Pic/Avatars/unknown.jpg" />
+         </image>
+      </ImageView>
+      <Label fx:id="userLabel" layoutX="33.0" layoutY="35.0" prefHeight="17.0" prefWidth="458.0" text="User: username" />
+      <ScrollPane layoutX="316.0" layoutY="81.0" prefHeight="174.0" prefWidth="200.0" />
+   </children>
+</AnchorPane>
