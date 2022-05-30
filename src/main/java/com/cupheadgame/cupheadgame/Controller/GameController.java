@@ -28,6 +28,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+import java.util.Random;
+
 public class GameController extends Application {
     private Label label = new Label("");
     private Label rocket = new Label("");
@@ -78,6 +80,7 @@ public class GameController extends Application {
         setBoss(pane);
         setMute(pane);
         setRocketIcon(pane);
+        setMiniBoss(pane);
         pane.getChildren().add(currentBombShape);
         Scene scene = new Scene(pane);
         stage.setTitle("cupheadGame");
@@ -284,5 +287,17 @@ public class GameController extends Application {
     private void setRocketIcon(Pane pane) {
         rocketIcon.setFill(new ImagePattern(tRocket));
         pane.getChildren().add(rocketIcon);
+    }
+
+    private void setMiniBoss(Pane pane) {
+        Random random = new Random();
+        for (int i = 0; i < 5; i++) {
+            int x = random.nextInt(1400);
+            int y = random.nextInt(800);
+            MiniBoss m = new MiniBoss(pane, i * 100, i * 15);
+            MiniBossTransition miniBossTransition = new MiniBossTransition(m);
+            miniBossTransition.play();
+            pane.getChildren().add(m);
+        }
     }
 }
