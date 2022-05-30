@@ -2,6 +2,7 @@ package com.cupheadgame.cupheadgame.Models.Transitions;
 
 import com.cupheadgame.cupheadgame.Models.Component.Boss;
 import com.cupheadgame.cupheadgame.Models.Component.Bullet;
+import com.cupheadgame.cupheadgame.Models.Component.MiniBoss;
 import com.cupheadgame.cupheadgame.Models.Game;
 import javafx.animation.Transition;
 import javafx.event.ActionEvent;
@@ -26,6 +27,20 @@ public class BulletTransition extends Transition {
             Game.getGame().incScore(1);
             getScore = true;
             this.setCycleDuration(Duration.millis(0));
+        }
+        for (MiniBoss miniBoss : MiniBoss.miniBosses) {
+            Game.getGame().incScore(1);
+            if (miniBoss.hasCollision(bullet)) {
+                miniBoss.miniBossTransition.setOnFinished(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent actionEvent) {
+                        miniBoss.remove();
+                    }
+                });
+                miniBoss.miniBossTransition.setCycleCount(0);
+                MiniBoss.miniBosses.remove(miniBoss);
+                break;
+            }
         }
     }
 }

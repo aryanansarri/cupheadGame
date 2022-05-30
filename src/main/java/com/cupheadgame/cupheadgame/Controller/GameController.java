@@ -74,9 +74,11 @@ public class GameController extends Application {
     private AudioClip emptySound = new
             AudioClip(Main.class.getResource("Musics/empty.mp3").toExternalForm());
 
+    public Pane p;
     @Override
     public void start(Stage stage) throws Exception {
         Pane pane = FXMLLoader.load(Main.class.getResource("GameMenu.fxml"));
+        p = pane;
         createBackground(pane);
         createAirplane(pane);
         setBulletLogos();
@@ -296,13 +298,14 @@ public class GameController extends Application {
         pane.getChildren().add(rocketIcon);
     }
 
-    private void setMiniBoss(Pane pane) {
+    public void setMiniBoss(Pane pane) {
         Random random = new Random();
         for (int i = 0; i < 5; i++) {
             int x = random.nextInt(1400);
             int y = random.nextInt(800);
-            MiniBoss m = new MiniBoss(pane, i * 100, i * 15);
+            MiniBoss m = new MiniBoss(pane, x, y);
             MiniBossTransition miniBossTransition = new MiniBossTransition(m);
+            m.setMiniBossTransition(miniBossTransition);
             miniBossTransition.play();
             pane.getChildren().add(m);
         }

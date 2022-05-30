@@ -1,6 +1,7 @@
 package com.cupheadgame.cupheadgame.Models.Component;
 
 import com.cupheadgame.cupheadgame.Main;
+import com.cupheadgame.cupheadgame.Models.Transitions.MiniBossTransition;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.ImagePattern;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 
 public class MiniBoss extends Rectangle {
     public static ArrayList<MiniBoss> miniBosses = new ArrayList<>();
+    public MiniBossTransition miniBossTransition;
 
     public static ArrayList<MiniBoss> getMiniBosses() {
         return miniBosses;
@@ -24,6 +26,11 @@ public class MiniBoss extends Rectangle {
         this.setFill(new ImagePattern(image));
         miniBosses.add(this);
     }
+
+    public void setMiniBossTransition(MiniBossTransition miniBossTransition) {
+        this.miniBossTransition = miniBossTransition;
+    }
+
     public boolean hasCollision(Rectangle rectangle) {
         return rectangle.getBoundsInParent().intersects(rectangle.getLayoutBounds());
     }

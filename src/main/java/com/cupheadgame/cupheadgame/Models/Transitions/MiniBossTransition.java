@@ -30,7 +30,6 @@ public class MiniBossTransition extends Transition {
         this.setOnFinished(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                MiniBoss.miniBosses.remove(miniBoss);
                 miniBoss.remove();
             }
         });

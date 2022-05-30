@@ -30,6 +30,7 @@ public class BossTransition extends Transition {
     }
 
     private int id = 1;
+    private int pre = 0;
     @Override
     protected void interpolate(double v) {
         id = (int) (v * 5);
@@ -39,6 +40,9 @@ public class BossTransition extends Transition {
         gameController.updateRocket();
         gameController.updateScore();
         gameController.timerUpdate();
-
+        if (Timer.getTimer().getS() > pre) {
+            pre += 15;
+            gameController.setMiniBoss(gameController.p);
+        }
     }
 }
