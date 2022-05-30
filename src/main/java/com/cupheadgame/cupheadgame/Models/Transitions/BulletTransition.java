@@ -20,7 +20,6 @@ public class BulletTransition extends Transition {
         this.pane = pane;
         this.setCycleDuration(Duration.millis(700));
     }
-
     @Override
     protected void interpolate(double v) {
         bullet.moveRight();
