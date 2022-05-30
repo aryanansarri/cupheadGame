@@ -88,7 +88,7 @@ public class GameController extends Application {
         setBoss(pane);
         setMute(pane);
         setRocketIcon(pane);
-        setMiniBoss(pane);
+        //setMiniBoss(pane);
         setExitButton(pane);
         pane.getChildren().add(currentBombShape);
         Scene scene = new Scene(pane);
@@ -303,11 +303,11 @@ public class GameController extends Application {
         for (int i = 0; i < 5; i++) {
             int x = random.nextInt(1400);
             int y = random.nextInt(800);
-            MiniBoss m = new MiniBoss(pane, x, y);
-            MiniBossTransition miniBossTransition = new MiniBossTransition(m);
-            m.setMiniBossTransition(miniBossTransition);
-            miniBossTransition.play();
-            pane.getChildren().add(m);
+            new MiniBoss(pane, x, y);
+        }
+        for (MiniBoss miniBoss : MiniBoss.miniBosses) {
+            pane.getChildren().add(miniBoss);
+            miniBoss.getMiniBossTransition().play();
         }
     }
 

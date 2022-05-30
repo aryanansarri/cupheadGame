@@ -26,7 +26,8 @@ public class MiniBossTransition extends Transition {
 
     public MiniBossTransition(MiniBoss miniBoss) {
         this.miniBoss = miniBoss;
-        this.setCycleDuration(Duration.millis(5000));
+        this.setCycleDuration(Duration.millis(1000));
+        this.setCycleCount(-1);
         this.setOnFinished(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -38,6 +39,10 @@ public class MiniBossTransition extends Transition {
     protected void interpolate(double v) {
         int id = (int) (v * 3);
         miniBoss.setFill(new ImagePattern(images[id]));
+        if (miniBoss.hitLeftWall()) {
+            miniBoss.remove();
+            return;
+        }
         miniBoss.moveLeft();
     }
 }

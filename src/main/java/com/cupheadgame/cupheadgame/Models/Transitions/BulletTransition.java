@@ -20,6 +20,7 @@ public class BulletTransition extends Transition {
         this.pane = pane;
         this.setCycleDuration(Duration.millis(700));
     }
+
     @Override
     protected void interpolate(double v) {
         bullet.moveRight();
@@ -31,16 +32,11 @@ public class BulletTransition extends Transition {
         for (MiniBoss miniBoss : MiniBoss.miniBosses) {
             Game.getGame().incScore(1);
             if (miniBoss.hasCollision(bullet)) {
-                miniBoss.miniBossTransition.setOnFinished(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent actionEvent) {
-                        miniBoss.remove();
-                    }
-                });
-                miniBoss.miniBossTransition.setCycleCount(0);
-                MiniBoss.miniBosses.remove(miniBoss);
+//                miniBoss.remove();
+                Game.getGame().incScore(2);
                 break;
             }
         }
     }
 }
+

@@ -41,7 +41,7 @@ public class BossTransition extends Transition {
         gameController.updateScore();
         gameController.timerUpdate();
         if (Timer.getTimer().getS() > pre) {
-            pre += 15;
+            pre += 10;
             gameController.setMiniBoss(gameController.p);
         }
     }

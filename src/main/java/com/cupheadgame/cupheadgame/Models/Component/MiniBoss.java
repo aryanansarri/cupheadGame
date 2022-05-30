@@ -24,6 +24,7 @@ public class MiniBoss extends Rectangle {
         super(x, y, 159, 109);
         this.pane = pane;
         this.setFill(new ImagePattern(image));
+        miniBossTransition = new MiniBossTransition(this);
         miniBosses.add(this);
     }
 
@@ -37,6 +38,7 @@ public class MiniBoss extends Rectangle {
 
     public void remove() {
         pane.getChildren().remove(this);
+        MiniBoss.getMiniBosses().remove(this);
     }
 
     public void moveLeft() {
@@ -46,5 +48,9 @@ public class MiniBoss extends Rectangle {
     }
     public boolean hitLeftWall() {
         return this.getX() <= 0;
+    }
+
+    public MiniBossTransition getMiniBossTransition() {
+        return miniBossTransition;
     }
 }
