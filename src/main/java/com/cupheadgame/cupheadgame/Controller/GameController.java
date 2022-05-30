@@ -6,6 +6,7 @@ import com.cupheadgame.cupheadgame.Models.Database;
 import com.cupheadgame.cupheadgame.Models.Game;
 import com.cupheadgame.cupheadgame.Models.Timer;
 import com.cupheadgame.cupheadgame.Models.Transitions.*;
+import com.cupheadgame.cupheadgame.Models.User;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -13,6 +14,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
@@ -48,6 +51,8 @@ public class GameController extends Application {
             "Pic/Game/models/rocket/r.png").toExternalForm());
     private Rectangle currentBombShape = new Rectangle(5, 700, 66, 66);
     private Rectangle rocketIcon = new Rectangle(139, 690, 127, 76);
+
+    private Rectangle exit = new Rectangle(265, 700, 66, 66);
     private boolean bomb = true;
     private boolean firstAlet = false;
 
@@ -68,6 +73,7 @@ public class GameController extends Application {
 
     private AudioClip emptySound = new
             AudioClip(Main.class.getResource("Musics/empty.mp3").toExternalForm());
+
     @Override
     public void start(Stage stage) throws Exception {
         Pane pane = FXMLLoader.load(Main.class.getResource("GameMenu.fxml"));
@@ -81,6 +87,7 @@ public class GameController extends Application {
         setMute(pane);
         setRocketIcon(pane);
         setMiniBoss(pane);
+        setExitButton(pane);
         pane.getChildren().add(currentBombShape);
         Scene scene = new Scene(pane);
         stage.setTitle("cupheadGame");
@@ -299,5 +306,45 @@ public class GameController extends Application {
             miniBossTransition.play();
             pane.getChildren().add(m);
         }
+    }
+
+    private void setExitButton(Pane pane) {
+        exit.setFill(new ImagePattern(
+                new Image(Main.class.getResource("Pic/exit.png").toExternalForm()
+        )));
+        exit.setCursor(Cursor.HAND);
+        exit.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setHeaderText(null);
+                alert.setContentText("Are you want close the game ?");
+                ButtonType okButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);
+                ButtonType noButton = new ButtonType("No", ButtonBar.ButtonData.NO);
+                ButtonType cancelButton = new ButtonType("cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+                alert.getButtonTypes().setAll(okButton, noButton, cancelButton);
+                alert.showAndWait().ifPresent(type -> {
+                    if (type.equals(okButton)) {
+                        User user = Database.getInstance().getLoggedInUser();
+                        int score = Game.getGame().getScore();
+                        int s = (int) Game.getGame().getTime();
+                        user.setScore(
+                                Math.max(
+                                        user.getScore(), score
+                                )
+                        );
+                        Database.getInstance().getGames().add(Game.getGame());
+                        Database.getInstance().saveGameData();
+                        try {
+                            audioClip.stop();
+                            new GamePanel().start(Main.getStage());
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                });
+            }
+        });
+        pane.getChildren().add(exit);
     }
 }

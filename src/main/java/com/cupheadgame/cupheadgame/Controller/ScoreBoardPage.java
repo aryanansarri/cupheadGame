@@ -3,6 +3,7 @@ package com.cupheadgame.cupheadgame.Controller;
 import com.cupheadgame.cupheadgame.Main;
 import com.cupheadgame.cupheadgame.Menu;
 import com.cupheadgame.cupheadgame.Models.Database;
+import com.cupheadgame.cupheadgame.Models.Game;
 import com.cupheadgame.cupheadgame.Models.User;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -36,12 +37,14 @@ public class ScoreBoardPage extends Application {
     }
 
     public void initialize() {
+        Database.getInstance().loadGameData();
         Collections.sort(
-                Database.getInstance().getUsers()
+                Database.getInstance().getGames()
         );
         int count = 1;
-        for (User user : Database.getInstance().getUsers()) {
-            Label label = new Label(count + " " + user.getUsername() + " " + user.getScore());
+        for (Game game : Database.getInstance().getGames()) {
+            Label label = new Label(count + " " +
+                    game.getPlayer().getUsername() + " " + game.getScore());
             vbox.getChildren().add(label);
             count += 1;
             if (count > 10) break;

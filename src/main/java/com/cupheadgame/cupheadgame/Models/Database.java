@@ -49,7 +49,7 @@ public class Database {
         }
     }
 
-    private void saveGameData() {
+    public void saveGameData() {
         try {
             FileWriter writer = new FileWriter("games.json");
             writer.write(new Gson().toJson(games));
@@ -82,6 +82,11 @@ public class Database {
             }
         }
         return null;
+    }
+
+
+    public ArrayList<Game> getGames() {
+        return games;
     }
 
     public ArrayList<User> getUsers() {

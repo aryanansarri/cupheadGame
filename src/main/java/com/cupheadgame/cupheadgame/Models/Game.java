@@ -1,6 +1,6 @@
 package com.cupheadgame.cupheadgame.Models;
 
-public class Game {
+public class Game implements Comparable<Game> {
     private static Game game;
     public static Game getInstance() {
         return game;
@@ -13,10 +13,10 @@ public class Game {
         game = null;
     }
 
-    private User player;
-    private double time;
-    private int score;
-    private double rocket;
+    public User player;
+    public double time;
+    public int score;
+    public double rocket;
 
     public Game(User player) {
         this.player = player;
@@ -84,4 +84,11 @@ public class Game {
         this.time = time;
     }
 
+    @Override
+    public int compareTo(Game o) {
+        if (this.getScore() == o.getScore()) {
+            return Double.compare(getTime(), o.getTime());
+        }
+        return -1 * Integer.compare(score, o.getScore());
+    }
 }

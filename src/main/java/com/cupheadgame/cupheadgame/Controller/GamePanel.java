@@ -29,6 +29,8 @@ public class GamePanel extends Application {
     public void start(Stage stage) throws Exception {
         stage.setTitle("Game Panel");
         stage.setScene(Menu.getMenu().getScene());
+        stage.centerOnScreen();
+        stage.setResizable(false);
         Menu.getMenu().getParent().getChildrenUnmodifiable().get(0).requestFocus();
         stage.show();
     }
