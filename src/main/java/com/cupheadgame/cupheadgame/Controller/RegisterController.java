@@ -11,8 +11,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.*;
 import java.util.Random;
 
 public class RegisterController {
@@ -27,6 +32,7 @@ public class RegisterController {
     @FXML
     private Label error;
     private String imageName = "unknown.jpg";
+    private Object StandardCopyOption;
 
     public void Submit(MouseEvent mouseEvent) throws IOException {
         register();
@@ -95,5 +101,27 @@ public class RegisterController {
     public void Back(MouseEvent mouseEvent) throws IOException {
         Menu.menu = Menu.LoginMenu;
         Main.goToLoginPage();
+    }
+
+    public void browser(MouseEvent mouseEvent) throws IOException, URISyntaxException {
+        try {
+
+            FileChooser fc = new FileChooser();
+            fc.setTitle("attach a file");
+            File selectedFile = fc.showOpenDialog(null);
+
+            if (selectedFile != null) {
+                Files.copy(
+                        selectedFile.toPath(),
+                        Path.of(Main.class.getResource("Pic/Avatars/" + selectedFile.getName()).toExternalForm())
+                );
+                imageName = selectedFile.getName();
+                avatar.setImage(
+                        new Image(Main.class.getResource("Pic/Avatars/" + imageName).toExternalForm()));
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
     }
 }

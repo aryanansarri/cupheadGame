@@ -36,7 +36,8 @@
                   <Image url="@Pic/Avatars/unknown.jpg" />
                </image>
             </ImageView>
-            <Button fx:id="rnd_btn" layoutX="2.0" layoutY="201.0" mnemonicParsing="false" onMouseClicked="#setRandowm" text="set random" />
+            <Button fx:id="rnd_btn" layoutX="36.0" layoutY="194.0" mnemonicParsing="false" onMouseClicked="#setRandowm" prefHeight="25.0" prefWidth="79.0" text="set random" />
+            <Button layoutX="-26.0" layoutY="194.0" mnemonicParsing="false" onMouseClicked="#browser" text="browser" />
          </children></AnchorPane>
     </right>
 </BorderPane>
