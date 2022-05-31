@@ -90,9 +90,9 @@ public class GameController extends Application {
         setRocketLabel(pane);
         setTimerLabel(pane);
         setBoss(pane);
+        //setDie(pane);
         setMute(pane);
         setRocketIcon(pane);
-        //setMiniBoss(pane);
         setExitButton(pane);
         setBossHeal(pane);
         pane.getChildren().add(currentBombShape);
@@ -383,7 +383,7 @@ public class GameController extends Application {
     }
 
     public void setDie(Pane pane) {
-        die = new Die(1000, 300, 267, 250, pane);
+        die = new Die(pane);
         DieTransition dieTransition = new DieTransition(die);
         dieTransition.play();
         pane.getChildren().add(die);
@@ -392,6 +392,11 @@ public class GameController extends Application {
                     @Override
                     public void handle(ActionEvent actionEvent) {
                         pane.getChildren().remove(die);
+                        try {
+                            new GamePanel().start(Main.getStage());
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 }
         );

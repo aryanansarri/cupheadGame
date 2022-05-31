@@ -58,9 +58,10 @@ public class BossTransition extends Transition {
             Database.getInstance().saveData();
             Database.getInstance().saveGameData();
             this.stop();
+            boss.remove();
+            gameController.setDie(gameController.p);
             try {
                 gameController.audioClip.stop();
-                new GamePanel().start(Main.getStage());
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

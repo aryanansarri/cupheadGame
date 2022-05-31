@@ -9,15 +9,23 @@ import javafx.util.Duration;
 public class DieTransition extends Transition {
     private Die die;
 
+    private Image images [] = {
+            new Image(Main.class.getResource(
+                    "Pic/Game/models/EggExplosionAssets/0.png").toExternalForm()),
+            new Image(Main.class.getResource(
+                    "Pic/Game/models/EggExplosionAssets/1.png").toExternalForm()),
+            new Image(Main.class.getResource(
+                    "Pic/Game/models/EggExplosionAssets/2.png").toExternalForm()),
+            new Image(Main.class.getResource(
+                    "Pic/Game/models/EggExplosionAssets/3.png").toExternalForm())
+    };
     public DieTransition(Die die) {
         this.die = die;
-        this.setCycleDuration(Duration.millis(1000));
+        this.setCycleDuration(Duration.millis(2000));
     }
     @Override
     protected void interpolate(double v) {
         int id = (int) (v * 3);
-        die.setImage(new Image(Main.class.getResource(
-                        "Pic/models/EggExplosionAssets/" + id + ".png").toExternalForm()
-        ));
+        die.setImage(images[id]);
     }
 }

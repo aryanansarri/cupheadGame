@@ -23,7 +23,7 @@ public class Boss extends Rectangle {
     public Boss(Pane pane) {
         super(800, 120, 651, 509);
         this.setFill(new ImagePattern(image));
-        this.heal = 4000;
+        this.heal = 50;
         this.pane = pane;
     }
 
@@ -56,7 +56,6 @@ public class Boss extends Rectangle {
     }
 
     public void remove() {
-        bossTransition.stop();
-        pane.getChildren().remove(this);
+        this.setVisible(false);
     }
 }
