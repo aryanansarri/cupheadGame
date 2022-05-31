@@ -103,7 +103,6 @@ public class GameController extends Application {
         pane.getChildren().get(2).requestFocus();
         stage.centerOnScreen();
         //stage.setFullScreen(true);
-        showInfo();
         stage.show();
     }
     public void initialize() {
