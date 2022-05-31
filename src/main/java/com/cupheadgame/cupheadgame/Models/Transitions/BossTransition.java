@@ -40,10 +40,6 @@ public class BossTransition extends Transition {
     @Override
     protected void interpolate(double v) {
         if (boss.getHeal() <= 0) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION) ;
-            alert.setHeaderText(null);
-            alert.setContentText("You Win");
-            alert.show();
             User user = Database.getInstance().getLoggedInUser();
             int score = Game.getGame().getScore();
             user.setScore(
@@ -59,7 +55,11 @@ public class BossTransition extends Transition {
             Database.getInstance().saveGameData();
             this.stop();
             boss.remove();
-            gameController.setDie(gameController.p);
+            try {
+                gameController.setDie(gameController.p);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             try {
                 gameController.audioClip.stop();
             } catch (Exception e) {

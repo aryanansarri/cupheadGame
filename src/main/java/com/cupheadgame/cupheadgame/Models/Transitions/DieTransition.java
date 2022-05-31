@@ -21,7 +21,7 @@ public class DieTransition extends Transition {
     };
     public DieTransition(Die die) {
         this.die = die;
-        this.setCycleDuration(Duration.millis(2000));
+        this.setCycleDuration(Duration.millis(2500));
     }
     @Override
     protected void interpolate(double v) {

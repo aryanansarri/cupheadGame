@@ -382,15 +382,24 @@ public class GameController extends Application {
         }
     }
 
-    public void setDie(Pane pane) {
+    public void setDie(Pane pane) throws InterruptedException {
+        AudioClip dieSound = new AudioClip(
+                Main.class.getResource("Musics/die.mp3").toExternalForm()
+        );
+        dieSound.play();
         die = new Die(pane);
         DieTransition dieTransition = new DieTransition(die);
         dieTransition.play();
         pane.getChildren().add(die);
+
         dieTransition.setOnFinished(
                 new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent actionEvent) {
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION) ;
+                        alert.setHeaderText(null);
+                        alert.setContentText("You Win");
+                        alert.show();
                         pane.getChildren().remove(die);
                         try {
                             new GamePanel().start(Main.getStage());
