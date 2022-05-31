@@ -12,9 +12,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.commons.io.FileUtils;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Random;
 
 public class ProfilePage extends Application {
@@ -110,5 +115,40 @@ public class ProfilePage extends Application {
         Database.getInstance().saveData();
         Menu.menu = Menu.LoginMenu;
         Main.goToLoginPage();
+    }
+
+    public void chosefile(MouseEvent mouseEvent) {
+        try {
+            FileChooser fc = new FileChooser();
+            fc.getExtensionFilters().add(
+                    new FileChooser.ExtensionFilter("JPG files", "*.jpg"));
+            fc.getExtensionFilters().add(
+                    new FileChooser.ExtensionFilter("PNG files", "*.png"));
+            fc.setTitle("attach a file");
+            File selectedFile = fc.showOpenDialog(null);
+            if (selectedFile != null) {
+                Path source= Paths.get(String.valueOf(selectedFile));
+                String path = Main.class.getResource("Pic/Avatars/")
+                        .toURI().toString().substring(6);
+                path += GenerateRandomName() + selectedFile.getName();
+                File destination = new File(path);
+                FileUtils.copyFile(selectedFile, destination);
+                imageName = selectedFile.getName();
+                avatar.setImage(
+                        new Image(Main.class.getResource("Pic/Avatars/" + imageName).toExternalForm()));
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+    private String GenerateRandomName() {
+        String res = "";
+        Random random = new Random();
+        for (int i = 0; i < 12; i++) {
+            char a = (char) ('a' + random.nextInt(26));
+            res += a;
+        }
+        return res;
     }
 }

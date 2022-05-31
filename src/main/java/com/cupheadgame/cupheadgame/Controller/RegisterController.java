@@ -13,6 +13,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -105,16 +106,20 @@ public class RegisterController {
 
     public void browser(MouseEvent mouseEvent) throws IOException, URISyntaxException {
         try {
-
             FileChooser fc = new FileChooser();
+            fc.getExtensionFilters().add(
+                    new FileChooser.ExtensionFilter("JPG files", "*.jpg"));
+            fc.getExtensionFilters().add(
+                    new FileChooser.ExtensionFilter("PNG files", "*.png"));
             fc.setTitle("attach a file");
             File selectedFile = fc.showOpenDialog(null);
-
             if (selectedFile != null) {
-                Files.copy(
-                        selectedFile.toPath(),
-                        Path.of(Main.class.getResource("Pic/Avatars/" + selectedFile.getName()).toExternalForm())
-                );
+                Path source=Paths.get(String.valueOf(selectedFile));
+                String path = Main.class.getResource("Pic/Avatars/")
+                        .toURI().toString().substring(6);
+                path += GenerateRandomName() + selectedFile.getName();
+                File destination = new File(path);
+                FileUtils.copyFile(selectedFile, destination);
                 imageName = selectedFile.getName();
                 avatar.setImage(
                         new Image(Main.class.getResource("Pic/Avatars/" + imageName).toExternalForm()));
@@ -123,5 +128,15 @@ public class RegisterController {
         catch (Exception e) {
             System.out.println(e);
         }
+    }
+
+    private String GenerateRandomName() {
+        String res = "";
+        Random random = new Random();
+        for (int i = 0; i < 12; i++) {
+            char a = (char) ('a' + random.nextInt(26));
+            res += a;
+        }
+        return res;
     }
 }
