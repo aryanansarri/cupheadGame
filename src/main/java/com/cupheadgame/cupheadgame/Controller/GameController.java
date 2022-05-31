@@ -371,5 +371,11 @@ public class GameController extends Application {
 
     public void UpdateBossHeal() {
         bossHeal.setText("heal: " + Boss.getInstance().getHeal());
+        if (Boss.getInstance().getHeal() <= 1000) {
+            bossHeal.setTextFill(Color.RED);
+        }
+        else {
+            bossHeal.setTextFill(Color.BLACK);
+        }
     }
 }
