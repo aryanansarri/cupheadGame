@@ -12,11 +12,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.media.AudioClip;
 
 import java.io.IOException;
 
 public class LoginController {
-
+    private AudioClip audioClip;
     @FXML
     private TextField username;
     @FXML
@@ -46,6 +47,7 @@ public class LoginController {
             if (user.getPassword().equals(password)) {
                 Database.getInstance().setLoggedInUser(user);
                 Menu.menu = Menu.GamePane;
+                Main.playback.stop();
                 new GamePanel().start(Main.getStage());
             }
             else {
@@ -60,6 +62,7 @@ public class LoginController {
     public void guest(MouseEvent mouseEvent) throws Exception {
         Database.getInstance().setLoggedInUser(new User("guest", "", "unknown.jpg", 0));
         Menu.menu = Menu.GamePane;
+        Main.playback.stop();
         new GamePanel().start(Main.getStage());
     }
 

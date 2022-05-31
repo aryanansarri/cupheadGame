@@ -13,6 +13,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -24,6 +25,9 @@ public class GamePanel extends Application {
     public Button Profile;
     public Button setting;
 
+    public static AudioClip playback = new AudioClip(
+            Main.class.getResource("Musics/GamePanel.mp3").toExternalForm()
+    );
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -32,6 +36,7 @@ public class GamePanel extends Application {
         stage.centerOnScreen();
         stage.setResizable(false);
         Menu.getMenu().getParent().getChildrenUnmodifiable().get(0).requestFocus();
+        playback.play();
         stage.show();
     }
 
@@ -43,9 +48,11 @@ public class GamePanel extends Application {
         Database.getInstance().setLoggedInUser(null);
         Menu.menu = Menu.LoginMenu;
         Main.goToLoginPage();
+        playback.stop();
     }
 
     public void newGame(MouseEvent mouseEvent) throws Exception {
+        playback.stop();
         new GameController().start(Main.getStage());
     }
 

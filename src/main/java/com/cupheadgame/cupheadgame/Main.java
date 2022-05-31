@@ -1,6 +1,7 @@
 package com.cupheadgame.cupheadgame;
 
 import javafx.application.Application;
+import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -8,7 +9,9 @@ import java.io.IOException;
 
 public class Main extends Application {
     private static Stage stage;
-
+    public static AudioClip playback = new AudioClip(
+            Main.class.getResource("Musics/Login.mp3").toExternalForm()
+    );
     public static void main(String[] args) {
         launch();
     }
@@ -25,6 +28,7 @@ public class Main extends Application {
         goToLoginPage();
     }
     public static void goToLoginPage() throws IOException {
+        playback.play();
         stage.setTitle("Login Page");
         stage.setScene(Menu.getMenu().getScene());
         stage.show();
