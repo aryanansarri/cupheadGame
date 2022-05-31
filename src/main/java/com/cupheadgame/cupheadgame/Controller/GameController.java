@@ -103,6 +103,7 @@ public class GameController extends Application {
         pane.getChildren().get(2).requestFocus();
         stage.centerOnScreen();
         //stage.setFullScreen(true);
+        showInfo();
         stage.show();
     }
     public void initialize() {
@@ -409,5 +410,12 @@ public class GameController extends Application {
                     }
                 }
         );
+    }
+
+    private void showInfo() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText(null);
+        alert.setContentText("for shoot u can press space and for change gun u can press tab");
+        alert.show();
     }
 }
