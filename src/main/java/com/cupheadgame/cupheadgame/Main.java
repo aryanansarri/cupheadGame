@@ -28,7 +28,8 @@ public class Main extends Application {
         goToLoginPage();
     }
     public static void goToLoginPage() throws IOException {
-        playback.play();
+        if (!playback.isPlaying())
+            playback.play();
         stage.setTitle("Login Page");
         stage.setScene(Menu.getMenu().getScene());
         stage.show();

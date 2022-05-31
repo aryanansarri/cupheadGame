@@ -77,6 +77,8 @@ public class GameController extends Application {
             AudioClip(Main.class.getResource("Musics/empty.mp3").toExternalForm());
 
     public Pane p;
+
+    private Die die;
     @Override
     public void start(Stage stage) throws Exception {
         Pane pane = FXMLLoader.load(Main.class.getResource("GameMenu.fxml"));
@@ -272,6 +274,7 @@ public class GameController extends Application {
         Boss boss = Boss.getInstance();
         pane.getChildren().add(boss);
         BossTransition bossTransition = new BossTransition(boss, this);
+        Boss.getInstance().bossTransition = bossTransition;
         bossTransition.play();
     }
 
@@ -377,5 +380,20 @@ public class GameController extends Application {
         else {
             bossHeal.setTextFill(Color.BLACK);
         }
+    }
+
+    public void setDie(Pane pane) {
+        die = new Die(1000, 300, 267, 250, pane);
+        DieTransition dieTransition = new DieTransition(die);
+        dieTransition.play();
+        pane.getChildren().add(die);
+        dieTransition.setOnFinished(
+                new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent actionEvent) {
+                        pane.getChildren().remove(die);
+                    }
+                }
+        );
     }
 }

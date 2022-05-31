@@ -36,7 +36,8 @@ public class GamePanel extends Application {
         stage.centerOnScreen();
         stage.setResizable(false);
         Menu.getMenu().getParent().getChildrenUnmodifiable().get(0).requestFocus();
-        playback.play();
+        if (!playback.isPlaying())
+            playback.play();
         stage.show();
     }
 
