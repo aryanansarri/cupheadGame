@@ -38,6 +38,8 @@ public class GameController extends Application {
     private Label rocket = new Label("");
 
     private Label timer = new Label("");
+
+    private Label bossHeal = new Label("");
     private Image currentBomb = new Image(Main.class.getResource(
             "Pic/Game/models/BulletLogos/BulletLogo.png").toExternalForm());
 
@@ -65,7 +67,7 @@ public class GameController extends Application {
             Main.class.getResource("Musics/bomb.mp3").toExternalForm()
     );
 
-    private AudioClip audioClip = new
+    public AudioClip audioClip = new
             AudioClip(Main.class.getResource("Musics/1.mp3").toExternalForm());
 
     private AudioClip rocketSound = new
@@ -90,6 +92,7 @@ public class GameController extends Application {
         setRocketIcon(pane);
         //setMiniBoss(pane);
         setExitButton(pane);
+        setBossHeal(pane);
         pane.getChildren().add(currentBombShape);
         Scene scene = new Scene(pane);
         stage.setTitle("cupheadGame");
@@ -336,7 +339,11 @@ public class GameController extends Application {
                                         user.getScore(), score
                                 )
                         );
+                        Game.getGame().setTime(
+                                Timer.getTimer().getSecs()
+                        );
                         Database.getInstance().getGames().add(Game.getGame());
+                        Database.getInstance().saveData();
                         Database.getInstance().saveGameData();
                         try {
                             audioClip.stop();
@@ -349,5 +356,20 @@ public class GameController extends Application {
             }
         });
         pane.getChildren().add(exit);
+    }
+
+    private void setBossHeal(Pane pane) {
+        bossHeal.setFont(new Font(18));
+        bossHeal.setTranslateX(
+                1000
+        );
+        bossHeal.setTranslateY(
+                Boss.getInstance().getTranslateY() + 120
+        );
+        pane.getChildren().add(bossHeal);
+    }
+
+    public void UpdateBossHeal() {
+        bossHeal.setText("heal: " + Boss.getInstance().getHeal());
     }
 }

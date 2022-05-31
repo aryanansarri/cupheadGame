@@ -44,7 +44,8 @@ public class ScoreBoardPage extends Application {
         int count = 1;
         for (Game game : Database.getInstance().getGames()) {
             Label label = new Label(count + " " +
-                    game.getPlayer().getUsername() + " " + game.getScore());
+                    game.getPlayer().getUsername() + " " + game.getScore() + "   "
+            + ((int)game.getTime() / 60) + ":" + ((int)game.getTime() % 60));
             vbox.getChildren().add(label);
             count += 1;
             if (count > 10) break;

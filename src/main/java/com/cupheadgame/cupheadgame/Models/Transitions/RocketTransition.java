@@ -38,6 +38,9 @@ public class RocketTransition extends Transition {
         int id = (int) (v * 2);
         rocket.setFill(new ImagePattern(image[id]));
         if (!getScore && Boss.getInstance().hasCollision(rocket)) {
+            Boss.getInstance().setHeal(
+                    Boss.getInstance().getHeal() - 100
+            );
             getScore = true;
             Game.getGame().incScore(10);
             this.setCycleDuration(Duration.millis(0));

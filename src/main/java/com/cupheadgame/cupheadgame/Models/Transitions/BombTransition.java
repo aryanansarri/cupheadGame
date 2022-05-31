@@ -23,6 +23,9 @@ public class BombTransition extends Transition {
     protected void interpolate(double v) {
         bomb.moveDown();
         if (!getScore && bomb.hasCollision(Boss.getInstance())) {
+            Boss.getInstance().setHeal(
+                    Boss.getInstance().getHeal() - 10
+            );
             getScore = true;
             Game.getGame().incScore(+2);
             this.setCycleDuration(Duration.millis(0));

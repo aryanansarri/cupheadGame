@@ -1,11 +1,15 @@
 package com.cupheadgame.cupheadgame.Models.Transitions;
 
 import com.cupheadgame.cupheadgame.Controller.GameController;
+import com.cupheadgame.cupheadgame.Controller.GamePanel;
 import com.cupheadgame.cupheadgame.Main;
 import com.cupheadgame.cupheadgame.Models.Component.Boss;
+import com.cupheadgame.cupheadgame.Models.Database;
 import com.cupheadgame.cupheadgame.Models.Game;
 import com.cupheadgame.cupheadgame.Models.Timer;
+import com.cupheadgame.cupheadgame.Models.User;
 import javafx.animation.Transition;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.util.Duration;
 
@@ -40,9 +44,36 @@ public class BossTransition extends Transition {
         gameController.updateRocket();
         gameController.updateScore();
         gameController.timerUpdate();
+        gameController.UpdateBossHeal();
         if (Timer.getTimer().getS() > pre) {
             pre += 35;
             gameController.setMiniBoss(gameController.p);
+        }
+        if (boss.getHeal() <= 0) {
+            this.stop();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION) ;
+            alert.setHeaderText(null);
+            alert.setContentText("You Win");
+            alert.show();
+            User user = Database.getInstance().getLoggedInUser();
+            int score = Game.getGame().getScore();
+            user.setScore(
+                    Math.max(
+                            user.getScore(), score
+                    )
+            );
+            Game.getGame().setTime(
+                    Timer.getTimer().getSecs()
+            );
+            Database.getInstance().getGames().add(Game.getGame());
+            Database.getInstance().saveData();
+            Database.getInstance().saveGameData();
+            try {
+                gameController.audioClip.stop();
+                new GamePanel().start(Main.getStage());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }

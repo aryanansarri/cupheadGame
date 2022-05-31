@@ -24,6 +24,9 @@ public class BulletTransition extends Transition {
     protected void interpolate(double v) {
         bullet.moveRight();
         if (!getScore && Boss.getInstance().hasCollision(bullet)) {
+            Boss.getInstance().setHeal(
+                    Boss.getInstance().getHeal() - 5
+            );
             Game.getGame().incScore(1);
             getScore = true;
             this.setCycleDuration(Duration.millis(0));

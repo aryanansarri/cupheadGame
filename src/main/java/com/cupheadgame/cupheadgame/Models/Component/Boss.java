@@ -13,9 +13,12 @@ public class Boss extends Rectangle {
     }
     private Image image = new Image(
             Main.class.getResource("Pic/Game/models/boss/1.png").toExternalForm());
+
+    private int heal;
     public Boss() {
         super(800, 120, 651, 509);
         this.setFill(new ImagePattern(image));
+        this.heal = 4000;
     }
 
     public void setImage(Image image) {
@@ -24,5 +27,25 @@ public class Boss extends Rectangle {
     }
     public boolean hasCollision(Rectangle rectangle) {
         return rectangle.getBoundsInParent().intersects(rectangle.getLayoutBounds());
+    }
+
+    public static Boss getBoss() {
+        return boss;
+    }
+
+    public static void setBoss(Boss boss) {
+        Boss.boss = boss;
+    }
+
+    public Image getImage() {
+        return image;
+    }
+
+    public int getHeal() {
+        return heal;
+    }
+
+    public void setHeal(int heal) {
+        this.heal = heal;
     }
 }
